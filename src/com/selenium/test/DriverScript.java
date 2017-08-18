@@ -12,8 +12,13 @@ public class DriverScript {
 
 	public Logger APP_LOGS;
 	public XLSReader suiteXLS;
+	public XLSReader currentTestSuiteXLS;
 	public int currentSuiteID;
+	public String currentTestCase;
+	public String currentTestSuite;
+	public int currentTestCaseId;
 	public String runmode="";
+	private String currentTestCaseName;
 	public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
 		
         //System.out.println(System.getProperty("user.dir"));
@@ -30,12 +35,29 @@ public class DriverScript {
 		APP_LOGS.debug("Initialize Suite Xls");
 		 suiteXLS = new XLSReader(System.getProperty("user.dir")+"\\src\\com\\selenium\\xls\\Suite.xls");
 	    System.out.println(suiteXLS.getRowCount("TestSuite"));
-	    for(int currentTestSuiteId=1; currentTestSuiteId<=suiteXLS.getRowCount("TestSuite"); currentTestSuiteId++){
-	    	runmode = suiteXLS.getCellData("TestSuite", "Runmode", 2);
-	    	
-	    	
-	    }
+	    runmode = suiteXLS.getCellData("TestSuite", "Runmode", 3);
 	    System.out.println("Runmode is :"  + runmode);
+	    
+	    
+	    for(int currentTestSuiteId=1; currentTestSuiteId<suiteXLS.getRowCount(Constants.TEST_SUITE_SHEET); currentTestSuiteId++){
+	    	   	System.out.println(suiteXLS.getCellData(Constants.TEST_SUITE_SHEET, Constants.TEST_SUITE_ID, currentTestSuiteId)+"--"+ suiteXLS.getCellData("TestSuite", "Runmode", currentTestSuiteId));
+	    	   	currentTestSuite = suiteXLS.getCellData(Constants.TEST_SUITE_SHEET, Constants.TEST_SUITE_ID, currentTestSuiteId); 
+             
+                if(suiteXLS.getCellData(Constants.TEST_SUITE_SHEET, Constants.RUNMODE, currentTestSuiteId).equalsIgnoreCase("Y")){
+                	System.out.println("Get current test suite whosse runmode is Y: "+currentTestSuite);
+                	currentTestSuiteXLS = new XLSReader(System.getProperty("user.dir")+ "\\src\\com\\selenium\\xls\\"+currentTestSuite+".xls");
+                  //iterate through all the testcases in the suite
+                  for(currentTestCaseId=1; currentTestCaseId<currentTestSuiteXLS.getRowCount("Test Cases"); currentTestCaseId++ ){
+                	  
+                	  currentTestCaseName = currentTestSuiteXLS.getCellData(Constants.TEST_CASE_SHEET, Constants.TEST_CASE_ID, currentTestCaseId);
+                	  
+                	  if(currentTestSuiteXLS.getCellData(Constants.TEST_CASE_SHEET, Constants.RUNMODE, currentTestCaseId).equalsIgnoreCase("Y")){
+                		  System.out.println("Get the Test Case whose runmode is Y: "+ currentTestCaseName);
+                	  }
+                  }
+                }
+	    }
+	    
 	}
 
 }

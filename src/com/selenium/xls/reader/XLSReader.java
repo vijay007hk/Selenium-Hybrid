@@ -38,6 +38,7 @@ public class XLSReader {
 	private HSSFSheet sheet = null;
 	private HSSFRow row = null;
 	private HSSFCell cell = null;
+	private HSSFRow activerow= null;
 	
 	
 	public XLSReader(String path){
@@ -104,7 +105,7 @@ public class XLSReader {
 	}
 	
 	//Returns Cell value
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation" })
 	public String getCellData(String sheetname, String colname, int rownum){
 		if(rownum<=0)
 		return "";
@@ -116,22 +117,25 @@ public class XLSReader {
 		
 		sheet = workbook.getSheetAt(index);
 		row = sheet.getRow(0);
-		for(int i=0; i<=row.getLastCellNum(); i++){
+		activerow = sheet.getRow(rownum);
+		for(int i=0; i<row.getLastCellNum(); i++){
 			if(row.getCell(i).getStringCellValue().trim().equals(colname))
 				colnum = i;
-			break;
+			if(colnum>0)break;
+				
 		}
 		if(colnum==-1)
 			return "";
-		if(cell.getCellType()==(Cell.CELL_TYPE_STRING))
-			return cell.getStringCellValue();
-		else if(cell.getCellTypeEnum().equals(Cell.CELL_TYPE_NUMERIC)){
+
+		if(activerow.getCell(colnum).getCellType()==
+				(Cell.CELL_TYPE_STRING))
+			return activerow.getCell(colnum).getStringCellValue();
+		else if(activerow.getCell(colnum).getCellType()==(Cell.CELL_TYPE_NUMERIC)){
 			String cellText = String.valueOf(cell.getNumericCellValue());
 			return cellText;
 		}
-			
-			
-		return "";	
 		
+			return "";		
+	
 	}
 }
