@@ -1,6 +1,8 @@
 package com.selenium.test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
@@ -13,12 +15,17 @@ public class DriverScript {
 	public Logger APP_LOGS;
 	public XLSReader suiteXLS;
 	public XLSReader currentTestSuiteXLS;
+	public XLSReader currentTestCaseXLS;
 	public int currentSuiteID;
 	public String currentTestCase;
 	public String currentTestSuite;
 	public int currentTestCaseId;
+	public int currentTestStepId;
 	public String runmode="";
 	private String currentTestCaseName;
+	
+	
+	
 	public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException {
 		
         //System.out.println(System.getProperty("user.dir"));
@@ -30,7 +37,12 @@ public class DriverScript {
 		//Initialise the app logs
 		APP_LOGS =Logger.getLogger("devpinoyLogger");
 		APP_LOGS.debug("Hello");
-		
+		FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+ "\\src\\com\\selenium\\config\\config.properties");
+		FileInputStream fis2 = new FileInputStream(System.getProperty("user.dir")+ "\\src\\com\\selenium\\config\\OR.properties");
+		Properties config = new Properties();
+		Properties or = new Properties();
+		config.load(fis);
+		or.load(fis2);
 		
 		APP_LOGS.debug("Initialize Suite Xls");
 		 suiteXLS = new XLSReader(System.getProperty("user.dir")+"\\src\\com\\selenium\\xls\\Suite.xls");
@@ -53,6 +65,28 @@ public class DriverScript {
                 	  
                 	  if(currentTestSuiteXLS.getCellData(Constants.TEST_CASE_SHEET, Constants.RUNMODE, currentTestCaseId).equalsIgnoreCase("Y")){
                 		  System.out.println("Get the Test Case whose runmode is Y: "+ currentTestCaseName);
+                		  //Execute test steps for the test case whose runmode is Y
+                		  for(currentTestStepId=1; currentTestStepId<currentTestSuiteXLS.getRowCount(Constants.TEST_STEP_SHEET); currentTestStepId++){
+                			  	String keyword = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.KEYWORDS, currentTestStepId);
+                			  System.out.println("Test steps : "+ currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.KEYWORDS, currentTestStepId));
+                			  if(keyword.equals("openBrowser"))
+                				  Keywords.openBrowser("", config.getProperty("browser"));
+                			  if(keyword.equals("navigate"))
+                				  Keywords.navigate("", config.getProperty("url"));
+                			  if(keyword.equals("verifyTitle"))
+                				  Keywords.verifyTitle("", or.getProperty("windowtitle"));
+                			  if(keyword.equals("clickLink")){
+                				  Keywords.clickLink(or.getProperty("login"), "");
+                				  System.out.println("Clicked on Login link");
+                			  }
+                			  if(keyword.equals("writeInput")){
+                				  Keywords.writeInput(or.getProperty("email"), or.getProperty("emailid"));
+                			  }
+                			  if(keyword.equals("writeInput")){
+                				  Keywords.writeInput(or.getProperty("password"), or.getProperty("pwd"));
+                			  }
+                			  
+                 		  }
                 	  }
                   }
                 }
