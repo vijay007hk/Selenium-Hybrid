@@ -40,7 +40,6 @@ public class Keywords {
 		
 		return "";
 	}
-	@SuppressWarnings("null")
 	public static String writeInput(String object, String data){
 		driver.findElement(By.xpath(object)).sendKeys(data);
 		/*Keyboard keys = null ;
@@ -48,7 +47,7 @@ public class Keywords {
 		return "";
 	}
 	public static String clickButton(String object, String data){
-		
+		driver.quit();
 		return "";
 	}
 	public static String clickLinkText(String object, String data){

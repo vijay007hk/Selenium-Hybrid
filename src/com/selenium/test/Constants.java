@@ -11,5 +11,7 @@ public class Constants {
 	public static String TEST_STEP_SHEET = "Test Steps";
 	public static String TEST_STEP_ID = "TSID";
 	public static String KEYWORDS = "Keyword";
+	public static String USERNAME = "Username";
+	public static String PASSWORD = "Password";
 	
 }

@@ -138,4 +138,15 @@ public class XLSReader {
 			return "";		
 	
 	}
+	public boolean isSheetExist(String currentTestCaseName) {
+		int numofsheets = workbook.getNumberOfSheets();
+		String sheet = currentTestCaseName ;  
+		for(int i=0;i<numofsheets; i++){
+			if(sheet.equals(workbook.getSheetAt(i).getSheetName().trim()))
+				return true;
+		}
+		
+		
+		return false;
+	}
 }
