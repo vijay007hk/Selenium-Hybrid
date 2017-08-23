@@ -18,10 +18,11 @@ public class DriverScript {
 
 		//System.out.println(System.getProperty("user.dir"));
 		DriverScript test = new DriverScript();
+		
 		test.start();
 
 	}
-	public Logger APP_LOGS;
+	public static Logger APP_LOGS;
 	public XLSReader suiteXLS;
 	public XLSReader currentTestSuiteXLS;
 	public XLSReader currentTestCaseXLS;
@@ -38,7 +39,14 @@ public class DriverScript {
 	public String keyword_exec_result;
 	public String username;
 	public String password;
-
+	public String currentObject;
+	public String currentData;
+	public String finalData = "";
+	
+	public DriverScript(){
+		keywords = new Keywords();
+		method = keywords.getClass().getMethods();
+	}
 
 	public void executeKeywords() throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 
@@ -51,24 +59,41 @@ public class DriverScript {
 
 		for(currentTestStepId=1; currentTestStepId<currentTestSuiteXLS.getRowCount(Constants.TEST_STEP_SHEET); currentTestStepId++){
 
-
 			System.out.println("Test steps : "+ currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.KEYWORDS, currentTestStepId));
-
 			if(currentTestCaseName.equals(currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.TEST_CASE_ID, currentTestStepId))){
 				currentKeyword = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.KEYWORDS, currentTestStepId);
 				APP_LOGS.debug(currentKeyword);
-
-				/* for(int i=0; i<method.length; i++){
+				currentObject = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.OBJECT, currentTestStepId);
+				currentData = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.DATA, currentTestStepId);
+				String object="";
+				//String[] data;
+						
+				if(!currentObject.isEmpty()){
+					object = or.getProperty(currentObject);
+				}
+				else object = "";
+								
+				if(currentData.contains("browser")){
+					/**TBD**///data = currentData.toString().split("|");
+					finalData = config.getProperty("browser");
+				}else if(currentData.contains("url")){
+					finalData = config.getProperty("url");
+				}
+				else finalData = or.getProperty(currentData);
+				
+				if(currentData.equals("username")) finalData=this.username;
+				if(currentData.equals("password")) finalData=this.password;
+				                 
+				 for(int i=0; i<method.length; i++){
 				  if(method[i].getName().equals(currentKeyword)){
-					  keyword_exec_result = (String)method[i].invoke(keywords, currentKeyword);
+					  keyword_exec_result = (String)method[i].invoke(keywords,object,finalData);
 					  APP_LOGS.debug(keyword_exec_result);
-
 				  }
-			  }*/
+			  }
 
 			}
 
-			if(currentKeyword.equals("openBrowser"))
+			/*if(currentKeyword.equals("openBrowser"))
 				Keywords.openBrowser("", config.getProperty("browser"));
 			if(currentKeyword.equals("navigate"))
 				Keywords.navigate("", config.getProperty("url"));
@@ -86,7 +111,7 @@ public class DriverScript {
 			}
 			if(currentKeyword.equals("clickButton")){
 				Keywords.clickButton("","");
-			}
+			}*/
 		}
 
 	}

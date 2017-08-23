@@ -18,13 +18,13 @@ public class Keywords {
 			 driver=new FirefoxDriver();
 			 driver.manage().timeouts().implicitlyWait(20L, TimeUnit.SECONDS);
 		 }
-		return "PASS";
+		return Constants.PASS;
 	}
 	public static String navigate(String object, String data){
 		
 	    driver.navigate().to(data);	
 	
-		return "";
+	    return Constants.PASS;
    }
 	public static String verifyTitle(String object, String data){
 	    if(driver.getTitle().equals(data)){
@@ -32,27 +32,30 @@ public class Keywords {
 		
 	    	return "PASS";
 	    }
-	    return "";
+	    return Constants.PASS;
 	}
 	
 	public static String clickLink(String object, String data){
 		driver.findElement(By.xpath(object)).click();;
 		
-		return "";
+		return Constants.PASS;
 	}
 	public static String writeInput(String object, String data){
 		driver.findElement(By.xpath(object)).sendKeys(data);
 		/*Keyboard keys = null ;
 		keys.sendKeys("TAB");*/
-		return "";
+		return Constants.PASS;
 	}
-	public static String clickButton(String object, String data){
+	public static String clickButton(String object, String data) throws InterruptedException{
+		driver.findElement(By.xpath(object)).click();
+		Thread.sleep(5000L);
 		driver.quit();
-		return "";
+		return Constants.PASS;
 	}
 	public static String clickLinkText(String object, String data){
 		
-		return "";
+		//driver.quit();
+		return Constants.PASS;
 	}
 
 }
