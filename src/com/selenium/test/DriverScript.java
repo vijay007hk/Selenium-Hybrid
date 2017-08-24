@@ -142,7 +142,7 @@ public class DriverScript {
 						else{
 							
 							executeKeywords();
-							createXLSReport();
+							//createXLSReport();
 						}
 					}
 				}
@@ -166,6 +166,9 @@ public class DriverScript {
 			}
 		}
 		currentTestSuiteXLS.setCellData(currentTestCaseName, Constants.RESULT, currentTestDataId, Constants.RESULT_PASS);
+		System.out.println("LoginTest "+ " Cols count :" + currentTestSuiteXLS.getColumnCount("Test Steps"));
+		System.out.println("col exists :" + currentTestSuiteXLS.isColumnExists("Test Steps", "Object"));
+		currentTestSuiteXLS.addColumn("Test Steps", "Final Results");
 		
 	}
 	

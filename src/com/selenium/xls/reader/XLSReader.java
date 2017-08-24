@@ -15,7 +15,6 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -39,6 +38,7 @@ public class XLSReader {
 	private HSSFSheet sheet = null;
 	private HSSFRow row = null;
 	private HSSFCell cell = null;
+	public HSSFCell setcell = null;
 	private HSSFRow activerow= null;
 	
 	
@@ -48,6 +48,7 @@ public class XLSReader {
 			fis = new FileInputStream(path);
 			workbook = new HSSFWorkbook(fis);
 			sheet = workbook.getSheetAt(0);
+			
 			fis.close();
 			
 		}catch (Exception e){
@@ -58,7 +59,7 @@ public class XLSReader {
 	}
 	public static void main(String[] args) throws IOException, EncryptedDocumentException, InvalidFormatException  {
 	
-	//	InputStream isr = new FileInputStream(System.getProperty("user.dir")+"\\src\\com\\selenium\\xls\\"+workbook);
+		//InputStream isr = new FileInputStream(System.getProperty("user.dir")+"\\src\\com\\selenium\\xls\\"+workbooks);
 	//	Workbook wb = WorkbookFactory.create(isr);
 	//	Sheet sheet =  wb.getSheetAt(0);
 	//	Row rw =  sheet.getRow(rownum);
@@ -76,6 +77,7 @@ public class XLSReader {
 		//}
 		//System.out.println("Row count is :"+getRowCount("CheckItemsSuite.xls", "LoginTest"));
 		//System.out.println("Column count is :"+getRowCount("CheckItemsSuite.xls", "LoginTest"));
+		
 
 	}
 	
@@ -155,13 +157,43 @@ public class XLSReader {
 		
 		int index = workbook.getSheetIndex(sheetname);
 		//int colnum = -1;
-		Cell newCell ;
-			
+		
 		sheet = workbook.getSheetAt(index);
 		row = sheet.getRow(0);
 		activerow = sheet.getRow(rownum);
-		newCell = activerow.createCell(activerow.getLastCellNum(), CellType.STRING);
-		newCell.setCellValue(value);
+		setcell = activerow.createCell(activerow.getLastCellNum());
+		setcell.setCellValue(value);
+	}
+	
+	//returns number of columns
+	public int getColumnCount(String sheetname){
+		int cols = 0;
+		int index = workbook.getSheetIndex(sheetname);
+		sheet = workbook.getSheetAt(index);
+		cols = sheet.getRow(0).getLastCellNum();
 		
+		return cols;
+	}
+	
+	//iscolExists
+	public boolean isColumnExists(String sheetname, String colname){
+		
+		int index = workbook.getSheetIndex(sheetname);
+		sheet = workbook.getSheetAt(index);
+		for(int i=0; i<sheet.getRow(0).getLastCellNum(); i++){
+		if(sheet.getRow(0).getCell(i).getStringCellValue().trim().equals(colname))
+		return true;
+		}
+		
+		return false;
+	}
+	
+	//add new column
+	public void addColumn(String sheetname, String colName){
+		int index = workbook.getSheetIndex(sheetname);
+		sheet = workbook.getSheetAt(index);
+		int cols = sheet.getRow(0).getPhysicalNumberOfCells();
+		sheet.getRow(0).createCell(cols+1).setCellValue(colName);
+		workbook.setFirstVisibleTab(1);			
 	}
 }
