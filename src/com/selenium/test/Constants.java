@@ -4,6 +4,7 @@ public class Constants {
 
 	public static final String OBJECT = "Object";
 	public static final String DATA = "Data";
+	public static final String RESULT = "Result";
 	public static String TEST_SUITE_SHEET = "TestSuite";
 	public static String TEST_SUITE_ID = "TSID";
 	public static String RUNMODE_YES = "Y";
@@ -16,5 +17,7 @@ public class Constants {
 	public static String USERNAME = "Username";
 	public static String PASSWORD = "Password";
 	public static String PASS = "PASS";
-	
+	public static String RESULT_PASS = "Pass";
+	public static String RESULT_FAIL = "Fail";
+	public static String RESULT_SKIP = "Skip";
 }

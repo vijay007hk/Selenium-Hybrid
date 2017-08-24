@@ -15,6 +15,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -138,6 +139,7 @@ public class XLSReader {
 			return "";		
 	
 	}
+	//verifies if a particular sheet exists
 	public boolean isSheetExist(String currentTestCaseName) {
 		int numofsheets = workbook.getNumberOfSheets();
 		String sheet = currentTestCaseName ;  
@@ -145,8 +147,21 @@ public class XLSReader {
 			if(sheet.equals(workbook.getSheetAt(i).getSheetName().trim()))
 				return true;
 		}
-		
-		
 		return false;
+	}
+	
+	//sets the cell with the specified value
+	public void setCellData(String sheetname, String colname, int rownum, String value){
+		
+		int index = workbook.getSheetIndex(sheetname);
+		//int colnum = -1;
+		Cell newCell ;
+			
+		sheet = workbook.getSheetAt(index);
+		row = sheet.getRow(0);
+		activerow = sheet.getRow(rownum);
+		newCell = activerow.createCell(activerow.getLastCellNum(), CellType.STRING);
+		newCell.setCellValue(value);
+		
 	}
 }

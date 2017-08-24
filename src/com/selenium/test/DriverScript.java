@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -41,6 +42,8 @@ public class DriverScript {
 	public String currentObject;
 	public String currentData;
 	public String finalData = "";
+	ArrayList<String> resultSet;
+	public int currentTestDataId;
 	
 	public DriverScript(){
 		keywords = new Keywords();
@@ -66,7 +69,6 @@ public class DriverScript {
 				currentObject = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.OBJECT, currentTestStepId);
 				currentData = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.DATA, currentTestStepId);
 				String object="";
-				
 						
 				if(!currentObject.isEmpty()){
 					object = or.getProperty(currentObject);
@@ -80,47 +82,31 @@ public class DriverScript {
 					data = currentData.split("\\|");
 					finalData = or.getProperty(data[1]);
 				}
-				else finalData = or.getProperty(currentData);
+				else {
+					  
+					//finalData = or.getProperty(currentData);
+				      finalData = currentTestSuiteXLS.getCellData(currentTestCaseName, currentData, currentTestDataId);
+				}
 				
-				if(currentData.equals("username")) finalData=this.username;
-				if(currentData.equals("password")) finalData=this.password;
-				                 
+							                 
 				 for(int i=0; i<method.length; i++){
 				  if(method[i].getName().equals(currentKeyword)){
 					  keyword_exec_result = (String)method[i].invoke(keywords,object,finalData);
 					  APP_LOGS.debug(keyword_exec_result);
+					  resultSet.add(keyword_exec_result);
 				  }
 			  }
 
 			}
-
-			/*if(currentKeyword.equals("openBrowser"))
-				Keywords.openBrowser("", config.getProperty("browser"));
-			if(currentKeyword.equals("navigate"))
-				Keywords.navigate("", config.getProperty("url"));
-			if(currentKeyword.equals("verifyTitle"))
-				Keywords.verifyTitle("", or.getProperty("windowtitle"));
-			if(currentKeyword.equals("clickLink")){
-				Keywords.clickLink(or.getProperty("login"), "");
-				System.out.println("Clicked on Login link");
-			}
-			if(currentKeyword.equals("writeInput")){
-				Keywords.writeInput(or.getProperty("email"), username);
-			}
-			if(currentKeyword.equals("writeInput")){
-				Keywords.writeInput(or.getProperty("password"), password);
-			}
-			if(currentKeyword.equals("clickButton")){
-				Keywords.clickButton("","");
-			}*/
+		
 		}
 
 	}
 	public void start() throws EncryptedDocumentException, InvalidFormatException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		//Initialise the app logs
+		
 		APP_LOGS =Logger.getLogger("devpinoyLogger");
 		APP_LOGS.debug("Hello");
-
 
 		APP_LOGS.debug("Initialize Suite Xls");
 		suiteXLS = new XLSReader(System.getProperty("user.dir")+"\\src\\com\\selenium\\xls\\Suite.xls");
@@ -128,11 +114,7 @@ public class DriverScript {
 		runmode = suiteXLS.getCellData("TestSuite", "Runmode", 3);
 		System.out.println("Runmode is :"  + runmode);
 
-
-		/*  for(int i=0; i<keywords.getClass().getMethods().length; i++){
-	        //method[i] = keywords.getClass().getMethod();
-	    }*/
-		//System.out.println("Method length: "+ method.length);
+		
 		for(int currentTestSuiteId=1; currentTestSuiteId<suiteXLS.getRowCount(Constants.TEST_SUITE_SHEET); currentTestSuiteId++){
 			System.out.println(suiteXLS.getCellData(Constants.TEST_SUITE_SHEET, Constants.TEST_SUITE_ID, currentTestSuiteId)+"--"+ suiteXLS.getCellData("TestSuite", "Runmode", currentTestSuiteId));
 			currentTestSuite = suiteXLS.getCellData(Constants.TEST_SUITE_SHEET, Constants.TEST_SUITE_ID, currentTestSuiteId); 
@@ -144,24 +126,23 @@ public class DriverScript {
 				for(currentTestCaseId=1; currentTestCaseId<currentTestSuiteXLS.getRowCount("Test Cases"); currentTestCaseId++ ){
 
 					currentTestCaseName = currentTestSuiteXLS.getCellData(Constants.TEST_CASE_SHEET, Constants.TEST_CASE_ID, currentTestCaseId);
-
+					resultSet = new ArrayList<String>();
 					if(currentTestSuiteXLS.getCellData(Constants.TEST_CASE_SHEET, Constants.RUNMODE, currentTestCaseId).trim().equalsIgnoreCase(Constants.RUNMODE_YES)){
 						System.out.println("Get the Test Case whose runmode is Y: "+ currentTestCaseName);
 						//Execute test steps- keywords for the test case whose runmode is Y and as many times as there is data
 						if(currentTestSuiteXLS.isSheetExist(currentTestCaseName)){
 							System.out.println("TestData Row Count  :"+currentTestSuiteXLS.getRowCount(currentTestCaseName));
-							for(int currentTestcaseId=1; currentTestcaseId<currentTestSuiteXLS.getRowCount(currentTestCaseName); currentTestcaseId++){
-								username = currentTestSuiteXLS.getCellData(currentTestCaseName, Constants.USERNAME, currentTestcaseId);
-								password = currentTestSuiteXLS.getCellData(currentTestCaseName, Constants.PASSWORD, currentTestcaseId);
-								if(currentTestSuiteXLS.getCellData(currentTestCaseName, Constants.RUNMODE, currentTestcaseId).trim().equals(Constants.RUNMODE_YES))
+							for(currentTestDataId=1; currentTestDataId<currentTestSuiteXLS.getRowCount(currentTestCaseName); currentTestDataId++){
+								
+								if(currentTestSuiteXLS.getCellData(currentTestCaseName, Constants.RUNMODE, currentTestDataId).trim().equals(Constants.RUNMODE_YES))
 									executeKeywords();
-
+								    createXLSReport();
 							}
 						}
 						else{
-							username = currentTestSuiteXLS.getCellData(currentTestCaseName, Constants.USERNAME, 1);
-							password = currentTestSuiteXLS.getCellData(currentTestCaseName, Constants.PASSWORD, 1);
+							
 							executeKeywords();
+							createXLSReport();
 						}
 					}
 				}
@@ -169,5 +150,23 @@ public class DriverScript {
 		}
 
 	}
-
+    
+	
+	public void createXLSReport(){
+		
+		if(resultSet.isEmpty()){
+			//skip
+			currentTestSuiteXLS.setCellData(currentTestCaseName, Constants.RESULT, currentTestDataId, Constants.RESULT_SKIP);
+		}else{
+			for(int i=0; i<resultSet.size(); i++){
+				if(!resultSet.get(i).equals(Constants.PASS)){
+					currentTestSuiteXLS.setCellData(currentTestCaseName, Constants.RESULT, currentTestDataId, Constants.RESULT_FAIL);
+				}
+				
+			}
+		}
+		currentTestSuiteXLS.setCellData(currentTestCaseName, Constants.RESULT, currentTestDataId, Constants.RESULT_PASS);
+		
+	}
+	
 }
