@@ -18,7 +18,6 @@ public class DriverScript {
 
 		//System.out.println(System.getProperty("user.dir"));
 		DriverScript test = new DriverScript();
-		
 		test.start();
 
 	}
@@ -50,6 +49,7 @@ public class DriverScript {
 
 	public void executeKeywords() throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 
+		String[] data;
 		FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+ "\\src\\com\\selenium\\config\\config.properties");
 		FileInputStream fis2 = new FileInputStream(System.getProperty("user.dir")+ "\\src\\com\\selenium\\config\\OR.properties");
 		Properties config = new Properties();
@@ -66,18 +66,19 @@ public class DriverScript {
 				currentObject = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.OBJECT, currentTestStepId);
 				currentData = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.DATA, currentTestStepId);
 				String object="";
-				//String[] data;
+				
 						
 				if(!currentObject.isEmpty()){
 					object = or.getProperty(currentObject);
 				}
 				else object = "";
 								
-				if(currentData.contains("browser")){
-					/**TBD**///data = currentData.toString().split("|");
-					finalData = config.getProperty("browser");
-				}else if(currentData.contains("url")){
-					finalData = config.getProperty("url");
+				if(currentData.contains("config")){
+					data = currentData.split("\\|");
+					finalData = config.getProperty(data[1]);
+				}else if(currentData.contains("OR")){
+					data = currentData.split("\\|");
+					finalData = or.getProperty(data[1]);
 				}
 				else finalData = or.getProperty(currentData);
 				
