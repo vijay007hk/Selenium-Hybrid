@@ -21,36 +21,49 @@ public class Keywords {
 		return Constants.PASS;
 	}
 	public static String navigate(String object, String data){
-		
-	    driver.navigate().to(data);	
-	
+		try{
+	    driver.navigate().to(data);
 	    return Constants.PASS;
+		}catch(Exception e){
+		   return Constants.RESULT_FAIL+ " Unable to naviagate to url";
+		}	
+	    
    }
 	public static String verifyTitle(String object, String data){
 	    if(driver.getTitle().equals(data)){
 		System.out.println("Title is as Expected!");
 		
-	    	return "PASS";
+		return Constants.PASS;
 	    }
-	    return Constants.PASS;
+	    else return Constants.RESULT_FAIL + " Title is not as expected!";
 	}
 	
 	public static String clickLink(String object, String data){
+		try{
 		driver.findElement(By.xpath(object)).click();;
-		
 		return Constants.PASS;
+		}catch(Exception e){
+			return Constants.RESULT_FAIL + " Unable to click on link";
+		}
 	}
 	public static String writeInput(String object, String data){
+		try{
 		driver.findElement(By.xpath(object)).sendKeys(data);
-		/*Keyboard keys = null ;
-		keys.sendKeys("TAB");*/
 		return Constants.PASS;
+		}catch(Exception e){
+			return Constants.RESULT_FAIL + " Unable to write in input.";
+		}
+		
 	}
 	public static String clickButton(String object, String data) throws InterruptedException{
+		try{
 		driver.findElement(By.xpath(object)).click();
 		Thread.sleep(5000L);
 		driver.quit();
 		return Constants.PASS;
+		}catch(Exception e){
+			return Constants.RESULT_FAIL + " Unable to click button.";
+		}
 	}
 	public static String clickLinkText(String object, String data){
 		

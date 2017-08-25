@@ -61,7 +61,7 @@ public class DriverScript {
 		or.load(fis2);
 
 		for(currentTestStepId=1; currentTestStepId<currentTestSuiteXLS.getRowCount(Constants.TEST_STEP_SHEET); currentTestStepId++){
-
+			
 			System.out.println("Test steps : "+ currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.KEYWORDS, currentTestStepId));
 			if(currentTestCaseName.equals(currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.TEST_CASE_ID, currentTestStepId))){
 				currentKeyword = currentTestSuiteXLS.getCellData(Constants.TEST_STEP_SHEET, Constants.KEYWORDS, currentTestStepId);
@@ -142,7 +142,7 @@ public class DriverScript {
 						else{
 							
 							executeKeywords();
-							//createXLSReport();
+							createXLSReport();
 						}
 					}
 				}
@@ -162,13 +162,12 @@ public class DriverScript {
 				if(!resultSet.get(i).equals(Constants.PASS)){
 					currentTestSuiteXLS.setCellData(currentTestCaseName, Constants.RESULT, currentTestDataId, Constants.RESULT_FAIL);
 				}
-				
 			}
 		}
 		currentTestSuiteXLS.setCellData(currentTestCaseName, Constants.RESULT, currentTestDataId, Constants.RESULT_PASS);
-		System.out.println("LoginTest "+ " Cols count :" + currentTestSuiteXLS.getColumnCount("Test Steps"));
+		/*System.out.println("LoginTest "+ " Cols count :" + currentTestSuiteXLS.getColumnCount("Test Steps"));
 		System.out.println("col exists :" + currentTestSuiteXLS.isColumnExists("Test Steps", "Object"));
-		currentTestSuiteXLS.addColumn("Test Steps", "Final Results");
+		currentTestSuiteXLS.addColumn("Test Steps", "Final Results");*/
 		
 	}
 	
