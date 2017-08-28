@@ -1,11 +1,15 @@
 package com.selenium.test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Keyboard;
+import com.selenium.test.DriverScript;
 
 @SuppressWarnings("unused")
 public class Keywords {
@@ -70,5 +74,36 @@ public class Keywords {
 		//driver.quit();
 		return Constants.PASS;
 	}
-
+    
+	/*********************** APPLICATION SPECIFIC KEYWORDS 
+	 * @throws IOException ********************/
+	
+	public static String validateLogin(String object, String data) throws IOException{
+		FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+ "\\src\\com\\selenium\\config\\config.properties");
+		FileInputStream fis2 = new FileInputStream(System.getProperty("user.dir")+ "\\src\\com\\selenium\\config\\OR.properties");
+		Properties config = new Properties();
+		Properties or = new Properties();
+		config.load(fis);
+		or.load(fis2);
+		object = or.getProperty("invalid_pssword_email");
+		try{
+			String ivalidemailpass =  driver.findElement(By.xpath(object)).getText();
+			String missingPass = driver.findElement(By.xpath(or.getProperty("blank_password"))).getText();
+			String missingEmail = driver.findElement(By.xpath(or.getProperty("blank_email"))).getText();
+			  DriverScript.correctData = DriverScript.currentTestSuiteXLS.getCellData(DriverScript.currentTestCaseName, Constants.CORRECTDATA, DriverScript.currentTestDataId );
+			  if(!DriverScript.correctData.equals(Constants.CORRECTDATA_YES)){
+				  String errMsg = DriverScript.currentTestSuiteXLS.getCellData(DriverScript.currentTestCaseName, Constants.ERRORMSG, DriverScript.currentTestDataId);
+				  if(errMsg.trim().equals(ivalidemailpass.trim()) || errMsg.trim().equals(missingPass.trim()) || errMsg.trim().equals(missingEmail.trim())){
+					  System.out.println("Error message is as expected :"+ errMsg);
+					  return Constants.PASS;
+				  }
+				  
+				  else return Constants.RESULT_FAIL;
+			  }
+		}catch(Exception e){
+			return Constants.RESULT_FAIL;
+		}
+		return "";
+		
+	}
 }

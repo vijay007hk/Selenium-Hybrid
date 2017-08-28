@@ -5,6 +5,9 @@ public class Constants {
 	public static final String OBJECT = "Object";
 	public static final String DATA = "Data";
 	public static final String RESULT = "Result";
+	public static final String CORRECTDATA = "CorrectData";
+	public static final Object CORRECTDATA_YES = "Y";
+	public static final String ERRORMSG = "ErrorMessage";
 	public static String TEST_SUITE_SHEET = "TestSuite";
 	public static String TEST_SUITE_ID = "TSID";
 	public static String RUNMODE_YES = "Y";

@@ -24,7 +24,7 @@ public class DriverScript {
 	}
 	public static Logger APP_LOGS;
 	public XLSReader suiteXLS;
-	public XLSReader currentTestSuiteXLS;
+	public static XLSReader currentTestSuiteXLS;
 	public XLSReader currentTestCaseXLS;
 	public int currentSuiteID;
 	public String currentTestCase;
@@ -33,7 +33,7 @@ public class DriverScript {
 	public int currentTestStepId;
 	public String runmode="";
 	public Method method[];
-	private String currentTestCaseName;
+	public static String currentTestCaseName;
 	public Keywords keywords;
 	public String currentKeyword = "";
 	public String keyword_exec_result;
@@ -43,7 +43,8 @@ public class DriverScript {
 	public String currentData;
 	public String finalData = "";
 	ArrayList<String> resultSet;
-	public int currentTestDataId;
+	public static int currentTestDataId;
+	public static String correctData="";
 	
 	public DriverScript(){
 		keywords = new Keywords();
@@ -74,7 +75,7 @@ public class DriverScript {
 					object = or.getProperty(currentObject);
 				}
 				else object = "";
-								
+	
 				if(currentData.contains("config")){
 					data = currentData.split("\\|");
 					finalData = config.getProperty(data[1]);
@@ -85,7 +86,7 @@ public class DriverScript {
 				else {
 					  
 					//finalData = or.getProperty(currentData);
-				      finalData = currentTestSuiteXLS.getCellData(currentTestCaseName, currentData, currentTestDataId);
+					 finalData = currentTestSuiteXLS.getCellData(currentTestCaseName, currentData, currentTestDataId);
 				}
 				
 							                 

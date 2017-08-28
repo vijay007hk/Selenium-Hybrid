@@ -133,6 +133,8 @@ public class XLSReader {
 		if(activerow.getCell(colnum).getCellType()==
 				(Cell.CELL_TYPE_STRING))
 			return activerow.getCell(colnum).getStringCellValue();
+		else if (activerow.getCell(colnum).getCellType() == Cell.CELL_TYPE_BLANK)
+			return null;
 		else if(activerow.getCell(colnum).getCellType()==(Cell.CELL_TYPE_NUMERIC)){
 			String cellText = String.valueOf(cell.getNumericCellValue());
 			return cellText;
