@@ -13,9 +13,9 @@ import com.selenium.test.DriverScript;
 
 @SuppressWarnings("unused")
 public class Keywords {
-   
 	
 	static WebDriver driver;
+	//TakeScreenShot scr = (TakeScreenShot)
 	public  static String openBrowser(String object, String data){
 		 if(data.equals("Firefox")){
 			 System.setProperty("webdriver.gecko.driver", "C:\\geckodriver\\geckodriver.exe");

@@ -1,6 +1,7 @@
 package com.selenium.test;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,7 +16,7 @@ import com.selenium.xls.reader.XLSReader;
 
 public class DriverScript {
 
-	public static void main(String[] args) throws EncryptedDocumentException, InvalidFormatException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public static void main(String[] args) throws IOException, FileNotFoundException , InvalidFormatException, IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		//System.out.println(System.getProperty("user.dir"));
 		DriverScript test = new DriverScript();

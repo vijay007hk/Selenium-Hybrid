@@ -57,7 +57,7 @@ public class XLSReader {
 		
 		
 	}
-	public static void main(String[] args) throws IOException, EncryptedDocumentException, InvalidFormatException  {
+	public static void main(String[] args) throws  EncryptedDocumentException, InvalidFormatException  {
 	
 		//InputStream isr = new FileInputStream(System.getProperty("user.dir")+"\\src\\com\\selenium\\xls\\"+workbooks);
 	//	Workbook wb = WorkbookFactory.create(isr);
@@ -133,8 +133,8 @@ public class XLSReader {
 		if(activerow.getCell(colnum).getCellType()==
 				(Cell.CELL_TYPE_STRING))
 			return activerow.getCell(colnum).getStringCellValue();
-		else if (activerow.getCell(colnum).getCellType() == Cell.CELL_TYPE_BLANK)
-			return null;
+		/*else if (activerow.getCell(colnum).getCellType() == Cell.CELL_TYPE_BLANK)
+			return null;*/
 		else if(activerow.getCell(colnum).getCellType()==(Cell.CELL_TYPE_NUMERIC)){
 			String cellText = String.valueOf(cell.getNumericCellValue());
 			return cellText;
