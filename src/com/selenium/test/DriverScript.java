@@ -11,6 +11,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.testng.annotations.Test;
 
 import com.selenium.xls.reader.XLSReader;
 
@@ -51,7 +52,7 @@ public class DriverScript {
 		keywords = new Keywords();
 		method = keywords.getClass().getMethods();
 	}
-
+    @Test
 	public void executeKeywords() throws IOException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 
 		String[] data;
@@ -84,6 +85,7 @@ public class DriverScript {
 					data = currentData.split("\\|");
 					finalData = or.getProperty(data[1]);
 				}
+				if(currentData.isEmpty()) finalData = "null";
 				else {
 					  
 					//finalData = or.getProperty(currentData);

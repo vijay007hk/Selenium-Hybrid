@@ -47,10 +47,10 @@ public class Keywords {
 		}	
 	    
    }
-	public  String verifyTitle(String object, String data) throws Exception{
+	public  String verifyTitle(String object, String data)  {
 	    if(driver.getTitle().equals(data)){
 		System.out.println("Title is as Expected!");
-		this.takeSnapShot(driver, Constants.SCREEN_SHOT);
+		//this.takeSnapShot(driver, Constants.SCREEN_SHOT);
 		return Constants.PASS;
 	    }
 	    else return Constants.RESULT_FAIL + " Title is not as expected!";
@@ -76,6 +76,17 @@ public class Keywords {
 		}
 		
 	}
+	public  String writeInput(String object) throws Exception{
+		try{
+		
+		return Constants.PASS;
+		}catch(Exception e){
+			takeSnapShot(driver, Constants.SCREEN_SHOT);
+			return Constants.RESULT_FAIL + " Unable to write in input.";
+		}
+		
+	}
+
 	public static String clickButton(String object, String data) throws InterruptedException{
 		try{
 		driver.findElement(By.xpath(object)).click();
