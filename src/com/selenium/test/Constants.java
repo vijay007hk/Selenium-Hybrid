@@ -23,4 +23,5 @@ public class Constants {
 	public static String RESULT_PASS = "Pass";
 	public static String RESULT_FAIL = "Fail";
 	public static String RESULT_SKIP = "Skip";
+	public static String SCREEN_SHOT = "C:\\selenium-workspace\\CoreHybrid\\src\\com\\selenium\\snapshot\\pass.jpg";
 }
